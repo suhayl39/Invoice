@@ -71,65 +71,29 @@
 
     function generatePDF() {
       const doc = new jsPDF();
+doc.setFillColor(185, 193, 178);
+doc.rect(0, 0, 210, 297, 'F'); // A4 background color
 
-      // Set background color
-      doc.setFillColor(185, 193, 178);
-      doc.rect(0, 0, 210, 297, 'F'); // A4 size background
+const img = new Image();
+img.src = 'logo.png';
+img.onload = () => {
+  // Logo on the left
+  doc.addImage(img, 'PNG', 14, 10, 25, 25); // smaller width, balanced height
 
-      // Add logo (make sure the logo file is in the same directory as this HTML file)
-      const img = new Image();
-      img.src = 'logo.png'; // Change this to the path where your logo is stored
-      img.onload = () => {
-        // Adjust logo position and size
-        doc.addImage(img, 'PNG', 10, 10, 30, 30);  // Modify x, y, width, height as needed
+  // Urban Den details on the right of logo
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text("Urban Den Holidays", 44, 16); // to the right of logo
 
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'bold');
-        doc.text("Urban Den Holidays", 200, 15, { align: 'right' });
-        doc.setFont(undefined, 'normal');
-        doc.text("Harwan, Srinagar.", 200, 22, { align: 'right' });
-        doc.text("urbandenholidays@gmail.com", 200, 29, { align: 'right' });
-        doc.text("Phone Number: 6006771034", 200, 36, { align: 'right' });
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text("Harwan, Srinagar.", 44, 22);
+  doc.text("urbandenholidays@gmail.com", 44, 28);
+  doc.text("Phone Number: 6006771034", 44, 34);
 
-        let y = 50;
-        const invoiceNumber = document.getElementById('invoiceNumber').value;
-        const invoiceDate = document.getElementById('invoiceDate').value;
-        const paymentDate = document.getElementById('paymentDate').value;
-        const billTo = document.getElementById('billTo').value;
-        const address = document.getElementById('address').value;
-
-        doc.setFont(undefined, 'bold');
-        doc.text("INVOICE", 105, y, { align: 'center' });
-        y += 10;
-
-        doc.setFont(undefined, 'normal');
-        doc.text(`Invoice Number: ${invoiceNumber}`, 14, y);
-        y += 7;
-        doc.text(`Invoice Date: ${invoiceDate}`, 14, y);
-        y += 7;
-        doc.text(`Payment Date: ${paymentDate}`, 14, y);
-        y += 14;
-        doc.setFont(undefined, 'bold');
-        doc.text("Bill To:", 14, y);
-        doc.setFont(undefined, 'normal');
-        y += 7;
-        doc.text(billTo, 14, y);
-        y += 7;
-        doc.text(address, 14, y);
-        y += 10;
-
-        const rows = [];
-        const itemRows = document.querySelectorAll('.item-row');
-        let total = 0;
-        itemRows.forEach((row, index) => {
-          const desc = row.querySelector('.desc').value;
-          const qty = parseFloat(row.querySelector('.qty').value);
-          const unit = row.querySelector('.unit').value;
-          const rate = parseFloat(row.querySelector('.rate').value);
-          const amount = qty * rate;
-          total += amount;
-          rows.push([index + 1, desc, qty, unit, rate.toFixed(2), amount.toFixed(2)]);
-        });
+  // Continue with the rest of the content...
+  // (Your INVOICE, billing details, table, etc.)
+};
 
         doc.autoTable({
           startY: y,
