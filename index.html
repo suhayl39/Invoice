@@ -78,21 +78,22 @@
       logo.src = 'logo.png';
 
       logo.onload = () => {
-        doc.setFillColor(185, 193, 178);
+        // White background
+        doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 210, 297, 'F');
 
-        // Add logo on left
+        // Add logo
         doc.addImage(logo, 'PNG', 14, 10, 45, 18);
 
-        // Add name & address on right
+        // Aligned name & address more towards left
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(14);
-        doc.text("Urban Den Holidays", 160, 20, { align: 'right' });
+        doc.text("Urban Den Holidays", 120, 20, { align: 'left' });
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-        doc.text("Harwan, Srinagar.", 160, 26, { align: 'right' });
-        doc.text("urbandenholidays@gmail.com", 160, 32, { align: 'right' });
-        doc.text("Phone: 6006771034", 160, 38, { align: 'right' });
+        doc.text("Harwan, Srinagar.", 120, 26, { align: 'left' });
+        doc.text("urbandenholidays@gmail.com", 120, 32, { align: 'left' });
+        doc.text("Phone: 6006771034", 120, 38, { align: 'left' });
 
         let y = 50;
         const invoiceNumber = document.getElementById('invoiceNumber').value;
@@ -139,8 +140,22 @@
           startY: y,
           head: [["Item #", "Description", "Quantity", "Unit", "Rate (INR)", "Amount (INR)"]],
           body: rows,
-          styles: { font: "helvetica", fontSize: 10, cellPadding: 3 },
-          headStyles: { fillColor: [100, 100, 100], textColor: 255 },
+          styles: {
+            font: "helvetica",
+            fontSize: 10,
+            cellPadding: 3,
+            lineColor: [0, 0, 0],
+            lineWidth: 0.5
+          },
+          headStyles: {
+            fillColor: [255, 255, 255],
+            textColor: 0,
+            fontStyle: 'bold',
+            lineWidth: 0.8
+          },
+          theme: 'grid',
+          tableLineWidth: 0.8,
+          tableLineColor: [0, 0, 0],
         });
 
         const finalY = doc.lastAutoTable.finalY + 10;
