@@ -78,41 +78,54 @@
       logo.src = 'logo.png';
 
       logo.onload = () => {
-        // White background
-        doc.setFillColor(255, 255, 255);
-        doc.rect(0, 0, 210, 297, 'F');
-
-        // Add logo
         doc.addImage(logo, 'PNG', 14, 10, 45, 18);
 
-        // Aligned name & address more towards left
+        // Move text closer to left edge & reduce font size
         doc.setFont('helvetica', 'bold');
-        doc.setFontSize(14);
-        doc.text("Urban Den Holidays", 120, 20, { align: 'left' });
+        doc.setFontSize(12);
+        doc.text("Urban Den Holidays", 62, 18, { align: 'left' });
+
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text("Harwan, Srinagar.", 120, 26, { align: 'left' });
-        doc.text("urbandenholidays@gmail.com", 120, 32, { align: 'left' });
-        doc.text("Phone: 6006771034", 120, 38, { align: 'left' });
+        doc.text("Harwan, Srinagar.", 62, 24, { align: 'left' });
+        doc.text("urbandenholidays@gmail.com", 62, 30, { align: 'left' });
+        doc.text("Phone: 6006771034", 62, 36, { align: 'left' });
 
         let y = 50;
+
+        // Invoice Title with underline
+        doc.setFontSize(13);
+        doc.setFont(undefined, 'bold');
+        doc.text("INVOICE", 105, y, { align: 'center' });
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
+        doc.line(14, y + 2, 196, y + 2);
+        y += 10;
+
         const invoiceNumber = document.getElementById('invoiceNumber').value;
         const invoiceDate = document.getElementById('invoiceDate').value;
         const paymentDate = document.getElementById('paymentDate').value;
         const billTo = document.getElementById('billTo').value;
         const address = document.getElementById('address').value;
 
-        doc.setFontSize(12);
+        doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
-        doc.text("INVOICE", 105, y, { align: 'center' });
-
-        y += 10;
+        doc.text("Invoice Number:", 14, y);
         doc.setFont(undefined, 'normal');
-        doc.text(`Invoice Number: ${invoiceNumber}`, 14, y);
+        doc.text(`${invoiceNumber}`, 50, y);
+
         y += 7;
-        doc.text(`Invoice Date: ${invoiceDate}`, 14, y);
+        doc.setFont(undefined, 'bold');
+        doc.text("Invoice Date:", 14, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${invoiceDate}`, 50, y);
+
         y += 7;
-        doc.text(`Payment Date: ${paymentDate}`, 14, y);
+        doc.setFont(undefined, 'bold');
+        doc.text("Payment Date:", 14, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${paymentDate}`, 50, y);
+
         y += 14;
         doc.setFont(undefined, 'bold');
         doc.text("Bill To:", 14, y);
@@ -140,36 +153,44 @@
           startY: y,
           head: [["Item #", "Description", "Quantity", "Unit", "Rate (INR)", "Amount (INR)"]],
           body: rows,
+          theme: 'grid',
           styles: {
             font: "helvetica",
-            fontSize: 10,
-            cellPadding: 3,
+            fontSize: 9,
             lineColor: [0, 0, 0],
-            lineWidth: 0.5
+            lineWidth: 0.5,
           },
           headStyles: {
             fillColor: [255, 255, 255],
-            textColor: 0,
+            textColor: [0, 0, 0],
+            lineColor: [0, 0, 0],
+            lineWidth: 0.8,
             fontStyle: 'bold',
-            lineWidth: 0.8
           },
-          theme: 'grid',
-          tableLineWidth: 0.8,
+          tableLineWidth: 1.2,
           tableLineColor: [0, 0, 0],
         });
 
         const finalY = doc.lastAutoTable.finalY + 10;
+
         doc.setFont(undefined, 'bold');
         doc.text(`Total Amount Paid: INR ${total.toFixed(2)}`, 14, finalY);
 
+        const thankY = finalY + 10;
         doc.setFont(undefined, 'normal');
-        doc.text("Thank you for choosing Urban Den Holidays!", 14, finalY + 10);
-        doc.text("Payment Details:", 14, finalY + 20);
-        doc.text("Account Name: Urban Den Holidays", 14, finalY + 27);
-        doc.text("Account Number: 0100010100008211", 14, finalY + 34);
-        doc.text("Bank Name: J&K Bank", 14, finalY + 41);
-        doc.text("Branch/IFSC: JAKA0ALAMGI", 14, finalY + 48);
-        doc.text("This invoice is computer generated – No Signatures are required.", 14, finalY + 58);
+        doc.text("Thank you for choosing Urban Den Holidays!", 14, thankY);
+
+        // Add full-width line after Thank You
+        doc.line(14, thankY + 2, 196, thankY + 2);
+
+        const bankY = thankY + 12;
+        doc.setFontSize(9);
+        doc.text("Payment Details:", 14, bankY);
+        doc.text("Account Name: Urban Den Holidays", 14, bankY + 7);
+        doc.text("Account Number: 0100010100008211", 14, bankY + 14);
+        doc.text("Bank Name: J&K Bank", 14, bankY + 21);
+        doc.text("Branch/IFSC: JAKA0ALAMGI", 14, bankY + 28);
+        doc.text("This invoice is computer generated – No Signatures are required.", 14, bankY + 38);
 
         doc.save(`${invoiceNumber}.pdf`);
       };
