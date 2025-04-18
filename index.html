@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Urban Den Holidays Invoice Generator</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -71,24 +71,27 @@
 
     function generatePDF() {
       const doc = new jsPDF();
+
+      // Set background color
       doc.setFillColor(185, 193, 178);
-      doc.rect(0, 0, 210, 297, 'F'); // A4 size background
+      doc.rect(0, 0, 210, 297, 'F');
 
       const img = new Image();
-      img.src = 'logo.png'; // Change to your new logo if needed
-
+      img.src = 'your-new-logo.png'; // Replace with your new logo filename
       img.onload = () => {
-        doc.addImage(img, 'PNG', 10, 10, 30, 30);
-
+        // Urban Den details on left
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
-        doc.text("Urban Den Holidays", 200, 15, { align: 'right' });
+        doc.text("Urban Den Holidays", 14, 20);
 
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        doc.text("Harwan, Srinagar.", 200, 22, { align: 'right' });
-        doc.text("urbandenholidays@gmail.com", 200, 29, { align: 'right' });
-        doc.text("Phone Number: 6006771034", 200, 36, { align: 'right' });
+        doc.text("Harwan, Srinagar.", 14, 26);
+        doc.text("urbandenholidays@gmail.com", 14, 32);
+        doc.text("Phone Number: 6006771034", 14, 38);
+
+        // Logo on right
+        doc.addImage(img, 'PNG', 160, 10, 40, 20); // Wider and shorter
 
         let y = 50;
         const invoiceNumber = document.getElementById('invoiceNumber').value;
@@ -110,8 +113,8 @@
         y += 14;
         doc.setFont(undefined, 'bold');
         doc.text("Bill To:", 14, y);
-        y += 7;
         doc.setFont(undefined, 'normal');
+        y += 7;
         doc.text(billTo, 14, y);
         y += 7;
         doc.text(address, 14, y);
@@ -135,6 +138,7 @@
           head: [["Item #", "Description", "Quantity", "Unit", "Rate (INR)", "Amount (INR)"]],
           body: rows,
           styles: {
+            font: "helvetica",
             fontSize: 10,
             cellPadding: 3
           },
@@ -154,7 +158,7 @@
         doc.text("Branch/IFSC: JAKA0ALAMGI", 14, finalY + 48);
         doc.text("This invoice is computer generated – No Signatures are required.", 14, finalY + 58);
 
-        doc.save(`${invoiceNumber || "invoice"}.pdf`);
+        doc.save(`${invoiceNumber}.pdf`);
       };
     }
   </script>
