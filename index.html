@@ -7,7 +7,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400&display=swap');
 
     body {
       font-family: 'Roboto', sans-serif;
@@ -30,7 +30,6 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-family: 'Roboto', sans-serif;
     }
     .items-container { margin-bottom: 10px; }
     .item-row { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -77,51 +76,52 @@
 
     function generatePDF() {
       const doc = new jsPDF();
+
       doc.setFillColor(185, 193, 178);
       doc.rect(0, 0, 210, 297, 'F');
 
       const img = new Image();
-      img.src = 'logo2.png'; // Make sure this is the logo you want to use
+      img.src = 'logo2.png';
       img.onload = () => {
-        doc.addImage(img, 'PNG', 140, 10, 50, 20); // Adjusted placement and size
+        doc.addImage(img, 'PNG', 160, 10, 40, 20);
 
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('Montserrat', 'bold');
         doc.setFontSize(16);
-        doc.text("Urban Den Holidays", 14, 20);
+        doc.text("Urban Den Holidays", 10, 15);
 
+        doc.setFont('Roboto', 'normal');
         doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text("Harwan, Srinagar.", 14, 26);
-        doc.text("urbandenholidays@gmail.com", 14, 31);
-        doc.text("Phone Number: 6006771034", 14, 36);
+        doc.text("Harwan, Srinagar.", 10, 21);
+        doc.text("Email: urbandenholidays@gmail.com", 10, 26);
+        doc.text("Phone: 6006771034", 10, 31);
 
-        let y = 50;
+        let y = 45;
         const invoiceNumber = document.getElementById('invoiceNumber').value;
         const invoiceDate = document.getElementById('invoiceDate').value;
         const paymentDate = document.getElementById('paymentDate').value;
         const billTo = document.getElementById('billTo').value;
         const address = document.getElementById('address').value;
 
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('Montserrat', 'bold');
         doc.setFontSize(14);
         doc.text("INVOICE", 105, y, { align: 'center' });
         y += 10;
 
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
+        doc.setFont('Roboto', 'normal');
+        doc.setFontSize(11);
         doc.text(`Invoice Number: ${invoiceNumber}`, 14, y);
         y += 7;
         doc.text(`Invoice Date: ${invoiceDate}`, 14, y);
         y += 7;
         doc.text(`Payment Date: ${paymentDate}`, 14, y);
         y += 14;
-        doc.setFont('helvetica', 'bold');
-        doc.text("Bill To:", 14, y);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('Roboto', 'bold');
+        doc.text("Bill To:", 160, y);
+        doc.setFont('Roboto', 'normal');
         y += 7;
-        doc.text(billTo, 14, y);
+        doc.text(billTo, 160, y);
         y += 7;
-        doc.text(address, 14, y);
+        doc.text(address, 160, y);
         y += 10;
 
         const rows = [];
@@ -142,7 +142,7 @@
           head: [["Item #", "Description", "Quantity", "Unit", "Rate (INR)", "Amount (INR)"]],
           body: rows,
           styles: {
-            font: "helvetica",
+            font: "Roboto",
             fontSize: 10,
             cellPadding: 3
           },
@@ -150,10 +150,10 @@
         });
 
         const finalY = doc.lastAutoTable.finalY + 10;
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('Roboto', 'bold');
         doc.text(`Total Amount Paid: INR ${total.toFixed(2)}`, 14, finalY);
 
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('Roboto', 'normal');
         doc.text("Thank you for choosing Urban Den Holidays!", 14, finalY + 10);
         doc.text("Payment Details:", 14, finalY + 20);
         doc.text("Account Name: Urban Den Holidays", 14, finalY + 27);
