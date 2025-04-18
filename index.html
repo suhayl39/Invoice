@@ -7,10 +7,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto&display=swap');
-
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: Helvetica, Arial, sans-serif;
       background-color: #f0f0f0;
       margin: 20px;
     }
@@ -40,7 +38,7 @@
 </head>
 <body>
   <div class="container">
-    <h2 style="font-family: 'Montserrat', sans-serif;">Urban Den Holidays - Invoice Generator</h2>
+    <h2>Urban Den Holidays - Invoice Generator</h2>
     <input id="invoiceNumber" placeholder="Invoice Number (e.g. INV-UDH-2025-0115)" />
     <input id="invoiceDate" type="date" placeholder="Invoice Date" />
     <input id="paymentDate" type="date" placeholder="Payment Date" />
@@ -83,18 +81,18 @@
         doc.setFillColor(185, 193, 178);
         doc.rect(0, 0, 210, 297, 'F');
 
-        // Add logo on right
-        doc.addImage(logo, 'PNG', 150, 10, 45, 18); // Wider and shorter
+        // Add logo on left
+        doc.addImage(logo, 'PNG', 14, 10, 45, 18);
 
-        // Add name & address on left
+        // Add name & address on right
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(14);
-        doc.text("Urban Den Holidays", 14, 20);
+        doc.text("Urban Den Holidays", 160, 20, { align: 'right' });
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(10);
-        doc.text("Harwan, Srinagar.", 14, 26);
-        doc.text("urbandenholidays@gmail.com", 14, 32);
-        doc.text("Phone: 6006771034", 14, 38);
+        doc.text("Harwan, Srinagar.", 160, 26, { align: 'right' });
+        doc.text("urbandenholidays@gmail.com", 160, 32, { align: 'right' });
+        doc.text("Phone: 6006771034", 160, 38, { align: 'right' });
 
         let y = 50;
         const invoiceNumber = document.getElementById('invoiceNumber').value;
