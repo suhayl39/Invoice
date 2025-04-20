@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Invoice Generator</title>
+  <meta charset="UTF-8" />
+  <title>Urban Den Invoice</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-  <button onclick="generatePDF()">Download Invoice PDF</button>
+  <button onclick="generatePDF()">Download Invoice</button>
 
   <script>
     const { jsPDF } = window.jspdf;
@@ -15,33 +15,36 @@
     function generatePDF() {
       const doc = new jsPDF();
 
-      // First, create an Image object
-      const img = new Image();
-      img.src = 'logo.png'; // Path relative to your HTML file
+      const logo = new Image();
+      logo.src = 'logo.png'; // Ensure this file exists in the same directory
 
-      img.onload = function () {
-        // When the image has loaded, generate the PDF
-        doc.addImage(img, 'PNG', 150, 10, 40, 15); // (x, y, width, height)
+      logo.onload = function () {
+        // Add logo (top-left)
+        doc.addImage(logo, 'PNG', 14, 10, 40, 15);
 
-        // Company Name and Address (top-left)
+        // Company Details (top-right)
         doc.setFontSize(14);
         doc.setFont(undefined, 'bold');
-        doc.text("Urban Den Holidays", 14, 20);
+        doc.text("Urban Den Holidays", 150, 20, { align: 'right' });
+
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        doc.text("Harwan, Srinagar", 14, 26);
-        doc.text("urbandenholidays@gmail.com", 14, 32);
-        doc.text("Phone: 6006771034", 14, 38);
+        doc.text("Harwan, Srinagar", 150, 26, { align: 'right' });
+        doc.text("urbandenholidays@gmail.com", 150, 32, { align: 'right' });
+        doc.text("Phone: 6006771034", 150, 38, { align: 'right' });
 
-        // Title
+        // Invoice Title
         doc.setFontSize(12);
         doc.setFont(undefined, 'bold');
         doc.text("INVOICE", 105, 50, { align: 'center' });
-        doc.line(14, 52, 196, 52); // underline
 
-        // Invoice Details
-        doc.setFontSize(10);
+        // Underline
+        doc.setLineWidth(0.5);
+        doc.line(14, 52, 196, 52);
+
+        // Invoice Info
         let y = 60;
+        doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
         doc.text("Invoice Number:", 14, y);
         doc.setFont(undefined, 'normal');
@@ -60,7 +63,7 @@
         doc.text("2025-04-22", 60, y);
 
         // Bill To
-        y += 10;
+        y += 12;
         doc.setFont(undefined, 'bold');
         doc.text("Bill To:", 14, y);
         y += 6;
@@ -71,7 +74,7 @@
         y += 6;
         doc.text("New York, NY", 14, y);
 
-        // Table
+        // Items Table
         const items = [
           ["1", "Room Booking", "2", "Nights", "2000", "4000"],
           ["2", "Airport Transfer", "1", "Trip", "500", "500"]
@@ -84,14 +87,16 @@
           headStyles: { fillColor: [70, 130, 180] }
         });
 
+        // Total
         let finalY = doc.lastAutoTable.finalY + 10;
         doc.setFont(undefined, 'bold');
         doc.text("Total: INR 4500", 14, finalY);
 
+        // Thank You + Underline
         finalY += 10;
         doc.setFont(undefined, 'normal');
         doc.text("Thank you for choosing Urban Den Holidays!", 14, finalY);
-        doc.line(14, finalY + 2, 196, finalY + 2); // full-width line
+        doc.line(14, finalY + 2, 196, finalY + 2);
 
         // Payment Info
         finalY += 10;
@@ -99,22 +104,23 @@
         doc.text("Account Number: 0100010100008211", 14, finalY + 6);
         doc.text("Bank Name: J&K Bank", 14, finalY + 12);
         doc.text("Branch/IFSC: JAKA0ALAMGI", 14, finalY + 18);
+        doc.setFontSize(9);
         doc.text("This invoice is computer generated – No Signatures required.", 14, finalY + 28);
 
         // PAID Watermark
         doc.saveGraphicsState();
-        doc.translate(150, 180);
-        doc.rotate(-20);
+        doc.setTextColor(0, 128, 0);
+        doc.setFontSize(16);
+        doc.setFont(undefined, 'bold');
         doc.setDrawColor(255, 0, 0);
         doc.setLineWidth(1);
+        doc.translate(150, 180); // Move origin
+        doc.rotate(-20);         // Rotate
         doc.circle(0, 0, 20, 'S');
-        doc.setFontSize(16);
-        doc.setTextColor(0, 128, 0);
-        doc.setFont(undefined, 'bold');
         doc.text("PAID", 0, 5, { align: 'center' });
         doc.restoreGraphicsState();
 
-        // Save file
+        // Save PDF
         doc.save("urban_den_invoice.pdf");
       };
     }
