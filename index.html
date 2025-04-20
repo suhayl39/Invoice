@@ -4,21 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Urban Den Holidays Invoice Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <style>
     body {
-      font-family: Helvetica, Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      margin: 0;
+      padding: 20px;
     }
 
     .container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
+      max-width: 700px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2, h4 {
+      color: #333;
+      margin-top: 20px;
+      text-align: center;
     }
 
     input, textarea, button {
@@ -27,23 +36,61 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 14px;
     }
+
+    .form-group { margin-bottom: 15px; }
 
     .items-container { margin-bottom: 10px; }
     .item-row { display: flex; gap: 10px; margin-bottom: 10px; }
     .item-row input { flex: 1; }
-    .add-btn { background-color: #4CAF50; color: white; border: none; }
-    .download-btn { background-color: #3f51b5; color: white; border: none; }
+
+    .add-btn, .download-btn {
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+    }
+
+    .add-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .add-btn:hover {
+      background-color: #218838;
+    }
+
+    .download-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 100px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <img src="logo.png" alt="Urban Den Logo" class="logo">
     <h2>Urban Den Holidays - Invoice Generator</h2>
-    <input id="invoiceNumber" placeholder="Invoice Number (e.g. INV-UDH-2025-0115)" />
-    <input id="invoiceDate" type="date" placeholder="Invoice Date" />
-    <input id="paymentDate" type="date" placeholder="Payment Date" />
-    <input id="billTo" placeholder="Customer Name" />
-    <input id="address" placeholder="Address" />
+    <h4>Invoice Details</h4>
+    <div class="form-group"><input id="invoiceNumber" placeholder="Invoice Number (e.g. INV-UDH-2025-0115)" /></div>
+    <div class="form-group"><input id="invoiceDate" type="date" placeholder="Invoice Date" /></div>
+    <div class="form-group"><input id="paymentDate" type="date" placeholder="Payment Date" /></div>
+    <div class="form-group"><input id="billTo" placeholder="Customer Name" /></div>
+    <div class="form-group"><input id="address" placeholder="Address" /></div>
+
+    <h4>Item Details</h4>
     <div class="items-container" id="items">
       <div class="item-row">
         <input placeholder="Description" class="desc" />
@@ -52,6 +99,7 @@
         <input type="number" placeholder="Rate" class="rate" />
       </div>
     </div>
+
     <button class="add-btn" onclick="addItem()">Add Item</button>
     <button class="download-btn" onclick="generatePDF()">Download PDF</button>
   </div>
@@ -75,26 +123,20 @@
     function generatePDF() {
       const doc = new jsPDF();
       const logo = new Image();
-      logo.src = 'logo.png'; // Ensure your logo.png exists or change the path
+      logo.src = 'logo.png';
 
       logo.onload = () => {
-        // Company Name & Details (left side)
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(12);
-        doc.text("Urban Den Holidays", 14, 16);
-
+        doc.text("Urban Den Holidays", 150, 16, { align: 'right' });
         doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text("Harwan, Srinagar.", 14, 22);
-        doc.text("urbandenholidays@gmail.com", 14, 28);
-        doc.text("Phone: 6006771034", 14, 34);
-
-        // Logo (right side)
-        doc.addImage(logo, 'PNG', 150, 10, 45, 18);
+        doc.text("Harwan, Srinagar.", 150, 22, { align: 'right' });
+        doc.text("urbandenholidays@gmail.com", 150, 28, { align: 'right' });
+        doc.text("Phone: 6006771034", 150, 34, { align: 'right' });
+        doc.addImage(logo, 'PNG', 14, 10, 40, 20);
 
         let y = 50;
-
-        // Header with underline
         doc.setFontSize(13);
         doc.setFont(undefined, 'bold');
         doc.text("INVOICE", 105, y, { align: 'center' });
@@ -113,20 +155,18 @@
         doc.text("Invoice Number:", 14, y);
         doc.setFont(undefined, 'normal');
         doc.text(`${invoiceNumber}`, 50, y);
-
         y += 7;
         doc.setFont(undefined, 'bold');
         doc.text("Invoice Date:", 14, y);
         doc.setFont(undefined, 'normal');
         doc.text(`${invoiceDate}`, 50, y);
-
         y += 7;
         doc.setFont(undefined, 'bold');
         doc.text("Payment Date:", 14, y);
         doc.setFont(undefined, 'normal');
         doc.text(`${paymentDate}`, 50, y);
-
         y += 14;
+
         doc.setFont(undefined, 'bold');
         doc.text("Bill To:", 14, y);
         y += 7;
@@ -157,14 +197,10 @@
           styles: {
             font: "helvetica",
             fontSize: 9,
-            lineColor: [0, 0, 0],
-            lineWidth: 0.5,
           },
           headStyles: {
             fillColor: [255, 255, 255],
             textColor: [0, 0, 0],
-            lineColor: [0, 0, 0],
-            lineWidth: 0.8,
             fontStyle: 'bold',
           },
         });
@@ -176,8 +212,6 @@
         const thankY = finalY + 10;
         doc.setFont(undefined, 'normal');
         doc.text("Thank you for choosing Urban Den Holidays!", 14, thankY);
-
-        // Line after thank-you
         doc.line(14, thankY + 2, 196, thankY + 2);
 
         const bankY = thankY + 12;
@@ -189,7 +223,16 @@
         doc.text("Branch/IFSC: JAKA0ALAMGI", 14, bankY + 28);
         doc.text("This invoice is computer generated – No Signatures are required.", 14, bankY + 38);
 
-        doc.save(`${invoiceNumber}.pdf`);
+        // Rounded PAID watermark
+        doc.setDrawColor(255, 0, 0);
+        doc.setLineWidth(1);
+        doc.circle(105, 150, 20, 'S');
+        doc.setTextColor(0, 128, 0);
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text("PAID", 105, 153, { align: 'center' });
+
+        doc.save(`${invoiceNumber || 'invoice'}.pdf`);
       };
     }
   </script>
